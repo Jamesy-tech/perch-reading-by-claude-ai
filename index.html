@@ -1,0 +1,482 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Perch Reading</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: one calm column. Left-aligned hero, then a card library. In a quiz the passage sits beside one question at a time. */
+:root{
+  --bg:#F5F8FE;
+  --surface:#FFFFFF;
+  --ink:#10223F;
+  --muted:#5A6B86;
+  --line:#DCE6F5;
+  --blue:#2B62F0;
+  --blue-ink:#1B4FD6;
+  --blue-soft:#E8F0FF;
+  --on-blue:#FFFFFF;
+  --good:#14804A;
+  --good-soft:#E3F6EB;
+  --bad:#B93434;
+  --bad-soft:#FCEAEA;
+  --shadow:0 1px 2px rgba(16,34,63,.05),0 10px 28px rgba(16,34,63,.07);
+  --display:"Bricolage Grotesque","Figtree",system-ui,sans-serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1220;--surface:#121C30;--ink:#E8EEFB;--muted:#9AA9C4;--line:#23314F;
+    --blue:#6C98FF;--blue-ink:#9DBAFF;--blue-soft:#172750;--on-blue:#0B1220;
+    --good:#4CD08A;--good-soft:#11301F;--bad:#FF8F8F;--bad-soft:#3A1A20;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.35);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1220;--surface:#121C30;--ink:#E8EEFB;--muted:#9AA9C4;--line:#23314F;
+  --blue:#6C98FF;--blue-ink:#9DBAFF;--blue-soft:#172750;--on-blue:#0B1220;
+  --good:#4CD08A;--good-soft:#11301F;--bad:#FF8F8F;--bad-soft:#3A1A20;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.35);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{
+  background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-block:0 56px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+}
+.wrap{max-width:1080px;margin:0 auto}
+h1,h2,h3{font-family:var(--display);line-height:1.12;margin:0;text-wrap:balance;letter-spacing:-.01em}
+p{margin:0}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px;border-radius:8px}
+
+/* Header */
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:18px}
+.brand{display:flex;align-items:center;gap:10px;background:none;border:0;padding:0;font-family:var(--display);font-weight:700;font-size:1.4rem;letter-spacing:-.02em}
+.brand svg{width:34px;height:34px;display:block}
+.top-note{color:var(--muted);font-size:.9rem}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:12px;background:var(--blue);color:var(--on-blue);font-weight:600;padding:12px 22px;min-height:46px;transition:background .15s,transform .15s}
+.btn:hover{background:var(--blue-ink)}
+.btn:active{transform:translateY(1px)}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.btn.ghost{background:transparent;color:var(--blue-ink);border:1.5px solid var(--line)}
+.btn.ghost:hover{background:var(--blue-soft)}
+.link{background:none;border:0;padding:6px 0;color:var(--blue-ink);font-weight:600;display:inline-flex;gap:6px;align-items:center}
+
+/* Hero */
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center;padding-block:36px 56px}
+.hero h1{font-size:clamp(2.3rem,5.4vw,3.7rem);font-weight:700}
+.hero h1 em{font-style:normal;color:var(--blue)}
+.hero p.lead{margin-top:18px;font-size:1.15rem;color:var(--muted);max-width:46ch}
+.hero .cta{margin-top:28px;display:flex;gap:12px;flex-wrap:wrap}
+.peek{background:var(--surface);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:22px;min-width:0}
+.peek-top{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:.85rem;font-weight:600;margin-bottom:14px}
+.peek h3{font-size:1.15rem;margin-bottom:14px;font-weight:600}
+.peek .o{display:flex;gap:10px;align-items:center;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;margin-top:8px;font-size:.95rem}
+.peek .o.sel{border-color:var(--blue);background:var(--blue-soft)}
+.peek .k{width:24px;height:24px;border-radius:50%;background:var(--bg);display:grid;place-items:center;font-size:.75rem;font-weight:700;flex:none}
+.peek .o.sel .k{background:var(--blue);color:var(--on-blue)}
+
+/* Steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;padding-block:8px 52px}
+.step{border-top:2px solid var(--blue);padding-top:14px;min-width:0}
+.step h3{font-size:1.1rem;margin-bottom:6px}
+.step p{color:var(--muted);font-size:.97rem}
+
+/* Library */
+.lib-head{display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+.lib-head h2{font-size:1.8rem}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:1.5px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 16px;font-weight:600;font-size:.92rem;color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--blue);border-color:var(--blue);color:var(--on-blue)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:16px}
+.card-btn{display:flex;flex-direction:column;gap:10px;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px;min-width:0;transition:border-color .15s,box-shadow .15s,transform .15s}
+.card-btn:hover{border-color:var(--blue);box-shadow:var(--shadow);transform:translateY(-2px)}
+.card-btn h3{font-size:1.25rem;font-weight:600}
+.card-btn .meta{color:var(--muted);font-size:.9rem}
+.pills{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.pill{font-size:.78rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;border-radius:999px;padding:3px 10px;background:var(--blue-soft);color:var(--blue-ink)}
+.pill.plain{background:transparent;border:1px solid var(--line);color:var(--muted)}
+.best{margin-top:auto;padding-top:10px;border-top:1px dashed var(--line);font-size:.88rem;font-weight:600;color:var(--good)}
+.best.none{color:var(--muted);font-weight:500}
+
+/* Start screen */
+.start{max-width:560px;margin:28px auto 0;background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);padding:32px}
+.start h1{font-size:2rem;margin:14px 0 10px}
+.start ul{list-style:none;padding:0;margin:20px 0 26px;display:grid;gap:10px;color:var(--muted)}
+.start li{display:flex;gap:10px;align-items:baseline}
+.start li strong{color:var(--ink);min-width:7.5em}
+
+/* Quiz */
+.qbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-block:6px 14px}
+.qbar .title{font-family:var(--display);font-weight:600;font-size:1.1rem;min-width:0;flex:1 1 200px}
+.timer{display:inline-flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:7px 14px;font-weight:700;font-variant-numeric:tabular-nums}
+.timer svg{width:18px;height:18px;color:var(--blue)}
+.segs{display:flex;gap:6px;margin-bottom:20px}
+.seg{flex:1;height:7px;border-radius:99px;background:var(--line)}
+.seg.cur{background:var(--blue)}
+.seg.ok{background:var(--good)}
+.seg.bad{background:var(--bad)}
+.quiz{display:grid;grid-template-columns:1.1fr 1fr;gap:20px;align-items:start}
+.passage,.qcard{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:28px;min-width:0}
+.passage{position:sticky;top:16px}
+.passage h2{font-size:1.5rem;margin-bottom:14px}
+.passage p{font-size:1.06rem;line-height:1.75;max-width:65ch}
+.passage p+p{margin-top:14px}
+.qhead{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:14px;color:var(--muted);font-weight:600;font-size:.9rem}
+.qcard h2{font-size:1.3rem;font-weight:600;margin-bottom:18px;outline:none}
+.opts{display:grid;gap:10px}
+.opt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:var(--surface);border:1.5px solid var(--line);border-radius:14px;padding:13px 14px;transition:border-color .12s,background .12s}
+.opt:hover:not([disabled]){border-color:var(--blue)}
+.opt .k{width:28px;height:28px;border-radius:50%;background:var(--bg);display:grid;place-items:center;font-weight:700;font-size:.82rem;flex:none}
+.opt .t{flex:1;min-width:0}
+.opt .s{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.opt.sel{border-color:var(--blue);background:var(--blue-soft)}
+.opt.sel .k{background:var(--blue);color:var(--on-blue)}
+.opt.correct{border-color:var(--good);background:var(--good-soft)}
+.opt.correct .k{background:var(--good);color:var(--bg)}
+.opt.correct .s{color:var(--good)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.opt.wrong .k{background:var(--bad);color:var(--bg)}
+.opt.wrong .s{color:var(--bad)}
+.opt[disabled]{cursor:default}
+.fb{margin-top:16px;border-radius:12px;padding:14px 16px;font-size:.97rem}
+.fb.good{background:var(--good-soft);color:var(--ink);border:1px solid var(--good)}
+.fb.bad{background:var(--bad-soft);color:var(--ink);border:1px solid var(--bad)}
+.actions{margin-top:20px;display:flex;justify-content:flex-end}
+
+/* Results */
+.res-top{display:grid;grid-template-columns:auto 1fr;gap:32px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);padding:32px;margin-top:12px}
+.ring{position:relative;width:140px;height:140px}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring .num{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:2.2rem}
+.res-top h1{font-size:2rem;margin-bottom:6px}
+.res-top .sub{color:var(--muted)}
+.stats{display:flex;gap:28px;flex-wrap:wrap;margin-top:18px}
+.stat b{display:block;font-family:var(--display);font-size:1.5rem;font-variant-numeric:tabular-nums}
+.stat span{color:var(--muted);font-size:.85rem}
+.badge-best{display:inline-block;margin-top:14px;font-weight:700;font-size:.85rem;color:var(--good);background:var(--good-soft);border-radius:999px;padding:4px 12px}
+.sec-title{font-size:1.3rem;margin:36px 0 14px}
+.table{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.row{display:grid;grid-template-columns:2.2rem 1fr 6.5rem 5rem;gap:12px;align-items:center;padding:13px 18px;border-top:1px solid var(--line)}
+.row:first-child{border-top:0}
+.row.h{color:var(--muted);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;background:var(--bg)}
+.row .n{font-weight:700;color:var(--muted)}
+.row .r{font-weight:700}
+.row .r.ok{color:var(--good)}
+.row .r.bad{color:var(--bad)}
+.row .tm{font-variant-numeric:tabular-nums;text-align:right}
+details.rev{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:4px 18px;margin-bottom:10px}
+details.rev summary{cursor:pointer;padding:12px 0;font-weight:600;list-style:none;display:flex;gap:10px;justify-content:space-between}
+details.rev summary::-webkit-details-marker{display:none}
+details.rev .body{padding:0 0 16px;color:var(--muted);display:grid;gap:6px;font-size:.96rem}
+details.rev .body b{color:var(--ink)}
+.res-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+
+footer{margin-top:64px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:.88rem;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+@media (max-width:860px){
+  .hero{grid-template-columns:1fr;gap:32px;padding-block:20px 40px}
+  .steps{grid-template-columns:1fr;gap:20px}
+  .quiz{grid-template-columns:1fr}
+  .passage{position:static}
+  .res-top{grid-template-columns:1fr;justify-items:start;padding:24px}
+}
+@media (max-width:520px){
+  .passage,.qcard{padding:20px}
+  .row{grid-template-columns:1.8rem 1fr 5.2rem;}
+  .row .tm{display:none}
+  .row.h .tm{display:none}
+  .start{padding:24px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <button class="brand" data-action="home" aria-label="Perch home">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="var(--blue)"/><circle cx="15" cy="14" r="7" fill="#fff"/><path d="M21.5 12.4 27.2 14 21.8 16.4Z" fill="#fff"/><circle cx="17.6" cy="12" r="1.4" fill="var(--blue)"/><rect x="6" y="24" width="20" height="2.4" rx="1.2" fill="#fff"/></svg>
+      Perch
+    </button>
+    <span class="top-note" id="progressNote"></span>
+  </header>
+  <main id="app" aria-live="off"></main>
+  <footer><span>Perch Reading · short texts, five questions, one timer.</span><span>Progress is saved in this browser only.</span></footer>
+</div>
+
+<script>
+var LEVELS={1:{name:"Starter",grades:"Grades 3–4"},2:{name:"Steady",grades:"Grades 5–6"},3:{name:"Stretch",grades:"Grades 7–8"}};
+
+// In every question, the first option is the correct one. Options are shuffled at the start of each quiz.
+var TEXTS=[
+{id:"lighthouse",title:"The Lighthouse Lesson",level:1,topic:"Story",
+ text:[
+ "Every evening, Grandpa Tomas climbed the ninety-two steps to the top of the lighthouse and polished the great glass lens. Mara, who was staying with him for the summer, followed with a bucket and a rag. “The sky is clear tonight,” she said. “Nobody needs the light. Why do we have to clean it?”",
+ "“A lighthouse is never for the nights when everything is easy,” Grandpa said, and kept rubbing.",
+ "Mara sighed, but she helped. By midnight, a thick fog rolled in from the sea. It swallowed the stars, then the rocks, then the harbor. Mara stood at the window and saw a tiny red lamp bobbing far out on the water. It was a fishing boat, and it was drifting too close to the rocks.",
+ "Grandpa switched on the lamp. The beam swept across the fog, bright and clean, and the boat slowly turned toward it. Minutes later, it slid safely into the harbor. Mara looked at the lens, glowing in the dark. “I think I understand now,” she whispered."],
+ qs:[
+ {type:"Theme",q:"What lesson does Mara learn in this story?",o:["It is wise to be ready even when things seem easy.","Fog is more dangerous than rocks.","Children should not climb tall stairs.","Boats should stay in the harbor at night."],why:"Grandpa says a lighthouse matters most on hard nights, and the foggy night proves him right."},
+ {type:"Detail",q:"Why does Mara question the cleaning at the start?",o:["She thinks nobody needs the light when the sky is clear.","The lens is too heavy to lift.","She is afraid of the dark.","Grandpa asked her to climb the steps alone."],why:"She says, “The sky is clear tonight. Nobody needs the light.”"},
+ {type:"Sequence",q:"What happened right after Mara saw the red lamp on the water?",o:["Grandpa turned on the lighthouse lamp.","The fog cleared away.","Grandpa rowed out to the boat.","Mara went to bed."],why:"Mara saw the boat drifting toward the rocks, and then Grandpa switched on the lamp."},
+ {type:"Vocabulary",q:"In the story, the word “swallowed” means…",o:["hid completely","ate quickly","washed away","made louder"],why:"The fog hid the stars, the rocks, and the harbor from view."},
+ {type:"Inference",q:"Why does Mara whisper, “I think I understand now”?",o:["She sees that the clean lens helped save the boat.","She wants to go home.","She is tired of climbing the steps.","She is scared of the fog."],why:"The bright, clean beam guided the boat to safety, which shows why Grandpa kept the lens ready."}
+ ]},
+{id:"honey",title:"How Bees Make Honey",level:1,topic:"Nature",
+ text:[
+ "Honey begins inside a flower. A worker bee visits dozens of blossoms on one trip, sipping a sweet liquid called nectar and storing it in a special stomach. When she returns to the hive, she passes the nectar to other bees, mouth to mouth.",
+ "The bees chew the nectar and spread it in thin drops inside wax cells. Then they fan their wings to blow warm air over the cells. The air dries the liquid until it turns thick and sticky. When the honey is ready, the bees seal each cell with a wax cap to keep it fresh.",
+ "Bees make honey so the colony can survive the winter, when few flowers bloom. Each worker bee makes only about one twelfth of a teaspoon of honey in her whole life, so a hive needs thousands of workers to fill its wax cells."],
+ qs:[
+ {type:"Main idea",q:"What is the passage mostly about?",o:["How bees turn flower nectar into honey, and why they make it","How bees build wax cells for their eggs","Why bees visit only one kind of flower","How people collect honey from hives"],why:"The passage follows nectar from the flower to the sealed cell and explains the reason for honey."},
+ {type:"Detail",q:"How do bees dry the nectar until it becomes thick honey?",o:["They fan their wings over it.","They leave it in direct sunlight.","They mix it with pollen.","They store it in a cool cellar."],why:"The second paragraph says bees fan their wings to blow warm air over the cells."},
+ {type:"Purpose",q:"Why do bees make honey?",o:["To have food for the colony when few flowers bloom","To attract more flowers to the hive","To build stronger wax cells","To keep the hive warm in summer"],why:"The last paragraph says bees make honey so the colony can survive the winter."},
+ {type:"Detail",q:"How much honey does one worker bee make in her whole life?",o:["About one twelfth of a teaspoon","About a full jar","About one cup","About one tablespoon"],why:"The passage states the amount directly in the last paragraph."},
+ {type:"Vocabulary",q:"In the passage, the word “colony” most likely means…",o:["a group of bees living together","a type of flower","a sweet liquid","a season of the year"],why:"A hive “needs thousands of workers,” so the colony is the whole group of bees that live there."}
+ ]},
+{id:"octopus",title:"How Octopuses Solve Problems",level:2,topic:"Science",
+ text:[
+ "An octopus has no bones, no shell, and no parent to teach it how to survive. Yet this soft-bodied animal is one of the smartest creatures in the sea. Scientists have watched octopuses unscrew jar lids from the inside, find their way through mazes, and squeeze through gaps no bigger than a coin.",
+ "Much of an octopus’s brainpower is not in its head. About two thirds of its neurons are in its eight arms, so each arm can touch, taste, and make small decisions on its own. Octopuses also learn through trial and error. In laboratory tests, they have learned to choose the right shape to earn a food reward and have remembered the lesson afterward.",
+ "Researchers are still puzzled by octopus intelligence. Most clever animals, such as dolphins and crows, live in groups and learn from one another. Octopuses live only a few years and spend most of their lives alone, so they must figure out the world by themselves."],
+ qs:[
+ {type:"Main idea",q:"Which sentence best states the main idea?",o:["Octopuses are surprisingly intelligent animals that learn and solve problems on their own.","Octopuses are the largest animals in the ocean.","Octopuses live in groups and teach each other.","Octopuses are dangerous to people."],why:"Every paragraph gives evidence of octopus intelligence or explains why it is surprising."},
+ {type:"Detail",q:"Where is most of an octopus’s brainpower found?",o:["In its eight arms","In its head","In its eyes","In its shell"],why:"About two thirds of its neurons are in its arms."},
+ {type:"Vocabulary",q:"In the last paragraph, “puzzled” means…",o:["confused","pleased","angry","tired"],why:"Researchers cannot yet explain how octopuses became so clever, so they are confused."},
+ {type:"Cause and effect",q:"Why is octopus intelligence unusual?",o:["It develops without a group to learn from.","Octopuses live longer than dolphins and crows.","Octopuses have a very large shell.","Octopuses cannot learn from experience."],why:"Other clever animals learn from each other, but octopuses spend most of their lives alone."},
+ {type:"Inference",q:"What can you infer from the fact that an octopus can squeeze through a gap the size of a coin?",o:["Its soft body can fit through very small spaces.","Octopuses are very small animals.","Octopuses have hard bodies.","Octopuses dislike open water."],why:"With no bones or shell, an octopus can bend and flatten its body to pass through tiny openings."}
+ ]},
+{id:"green-roofs",title:"Gardens in the Sky",level:2,topic:"Science",
+ text:[
+ "Look down from a tall building in many cities, and you may see patches of green where you expect to see gray. These are green roofs: rooftops covered with soil and plants instead of tar or metal.",
+ "Green roofs solve several problems at once. Plants and soil soak up rainwater, which reduces the flooding that happens when storms overwhelm city drains. In summer, the plants shade the building and release moisture, which keeps the rooms below cooler and lowers the need for air conditioning. In winter, the soil acts like a blanket and helps hold heat inside.",
+ "Green roofs also give wildlife a place to live. Bees, butterflies, and birds have been found nesting in rooftop gardens in the middle of busy cities. The main drawback is cost. A green roof is more expensive to build than an ordinary one, and it needs a strong structure to hold the weight of wet soil. Even so, some cities now encourage them."],
+ qs:[
+ {type:"Main idea",q:"What is the passage mostly about?",o:["Green roofs offer many benefits to cities, even though they cost more.","Why tar and metal roofs are cheaper.","How to grow vegetables on a balcony.","Why city drains overflow in storms."],why:"The passage lists the benefits of green roofs and then names their main drawback."},
+ {type:"Detail",q:"How do green roofs help during heavy storms?",o:["They soak up rainwater so drains do not overflow.","They send rain straight into the drains.","They cool the rain before it lands.","They stop clouds from forming."],why:"Plants and soil soak up rainwater, which reduces flooding."},
+ {type:"Vocabulary",q:"In the last paragraph, “drawback” means…",o:["a disadvantage","a reward","a design","a surprise"],why:"The sentences after it describe cost and weight, which are disadvantages."},
+ {type:"Detail",q:"Which of these is NOT mentioned as a benefit of green roofs?",o:["They make buildings weigh less.","They help keep rooms cooler in summer.","They give wildlife a home.","They help reduce flooding."],why:"The passage says the opposite: green roofs add weight because of the wet soil."},
+ {type:"Cause and effect",q:"Why does a green roof need a strong building structure?",o:["Wet soil and plants are heavy.","Plant roots grow through the walls.","Birds can damage ordinary roofs.","Rain would otherwise melt the roof."],why:"The passage says the structure must hold the weight of wet soil."}
+ ]},
+{id:"bicycle",title:"The Journey of the Bicycle",level:3,topic:"History",
+ text:[
+ "The first bicycle had no pedals. In 1817, a German inventor named Karl von Drais built a wooden “running machine” that riders pushed along with their feet. It was fast on smooth roads, but it was also heavy and uncomfortable, and some towns banned it from sidewalks.",
+ "In the 1860s, French mechanics attached pedals to the front wheel. The new machine shook riders so hard that it earned the nickname “boneshaker.” Later, makers built bicycles with a giant front wheel, because a bigger wheel carried a rider farther with each turn of the pedals. These “high-wheelers” were fast, but a fall from such a height was dangerous.",
+ "The big breakthrough came in the 1880s. Designers added a chain that connected the pedals to the back wheel, which allowed both wheels to be the same size. This “safety bicycle” was easier to balance and much less risky, and it looks very much like the bicycles we ride today."],
+ qs:[
+ {type:"Main idea",q:"Which sentence best states the main idea?",o:["The bicycle changed over many years as inventors fixed the problems of earlier designs.","The bicycle was invented by one person in a single year.","High-wheelers are the best bicycles ever made.","Bicycles were banned in most countries."],why:"Each paragraph describes a design and the problem that led to the next one."},
+ {type:"Detail",q:"What did the first bicycle NOT have?",o:["Pedals","Wheels","A wooden frame","A rider"],why:"The passage opens by saying the first bicycle had no pedals."},
+ {type:"Vocabulary",q:"In the last paragraph, “breakthrough” means…",o:["an important step forward","a sudden accident","a new rule","a disagreement"],why:"The chain and equal wheels solved earlier problems, which makes it a major step forward."},
+ {type:"Cause and effect",q:"Why were high-wheelers built with a giant front wheel?",o:["A bigger wheel carried a rider farther with each turn of the pedals.","A bigger wheel made the ride smoother.","Giant wheels were cheaper to make.","Riders wanted to avoid being banned from sidewalks."],why:"The second paragraph gives this reason directly."},
+ {type:"Inference",q:"Why was the 1880s design called the “safety bicycle”?",o:["Its equal-sized wheels and chain made it easier to balance and less dangerous.","It came with a helmet.","It was slower than every earlier model.","It was only allowed on quiet roads."],why:"High-wheelers were dangerous to fall from, while the new design was easier to balance."}
+ ]},
+{id:"everest",title:"Climbing Mount Everest",level:3,topic:"Geography",
+ text:[
+ "Mount Everest, on the border of Nepal and China, is the highest mountain on Earth. Its peak stands 8,849 meters above sea level, nearly nine kilometers into the sky.",
+ "In 1953, Edmund Hillary of New Zealand and Tenzing Norgay, a Sherpa from Nepal, became the first climbers confirmed to reach the top. Since then, thousands of people have followed. Today, expedition teams spend weeks getting used to the thin air at base camp before they attempt the summit.",
+ "The air near the top holds only about one third of the oxygen found at sea level, so many climbers breathe from bottled oxygen. Even so, the weather can change quickly, and temperatures can fall far below freezing.",
+ "Reaching the top takes more than strength. It takes patience, planning, and respect for the mountain."],
+ qs:[
+ {type:"Main idea",q:"What is the passage mostly about?",o:["Why climbing Everest is a difficult challenge that needs careful preparation","The life of Edmund Hillary","How bottled oxygen is made","Why Nepal and China share a border"],why:"The passage describes the height, the thin air, the weather, and the planning that a climb requires."},
+ {type:"Detail",q:"Who were the first climbers confirmed to reach the top of Everest?",o:["Edmund Hillary and Tenzing Norgay","Two explorers from Norway","A team of Chinese scientists","Edmund Hillary alone"],why:"The second paragraph names both climbers and the year, 1953."},
+ {type:"Cause and effect",q:"Why do expedition teams spend weeks at base camp?",o:["To get used to the thin air","To build a road to the top","To melt snow for drinking","To practice using bottled oxygen"],why:"The passage says teams spend weeks getting used to the thin air before the summit attempt."},
+ {type:"Vocabulary",q:"In the passage, the word “summit” means…",o:["the highest point of a mountain","a long delay","a piece of equipment","a camp at the bottom"],why:"Climbers attempt the summit, which is the top that Hillary and Norgay reached."},
+ {type:"Inference",q:"What does “respect for the mountain” suggest in the last paragraph?",o:["Climbers must take the mountain’s dangers seriously.","Climbers should ask permission before starting.","The mountain is a holy place for all climbers.","Only experts may look at the mountain."],why:"Thin air, sudden weather, and freezing temperatures make careful, serious behavior necessary."}
+ ]}
+];
+TEXTS.forEach(function(t){t.words=t.text.join(" ").split(/\s+/).length;t.mins=Math.max(1,Math.round(t.words/180));});
+
+var state={view:"home",filter:"all",text:null,qs:[],idx:0,picked:null,submitted:false,answers:[],startTime:0,endTime:0,qStart:0,timerId:null,result:null};
+var app=document.getElementById("app");
+
+function getBest(){try{return JSON.parse(localStorage.getItem("perch-best-v1"))||{};}catch(e){return {};}}
+function saveBest(id,v){try{var b=getBest();b[id]=v;localStorage.setItem("perch-best-v1",JSON.stringify(b));}catch(e){}}
+function fmt(s){s=Math.max(0,Math.round(s));var m=Math.floor(s/60),r=s%60;return m+":"+(r<10?"0":"")+r;}
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+var LET=["A","B","C","D"];
+var CLOCK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9.5 2.5h5"/></svg>';
+
+function stopTimer(){if(state.timerId){clearInterval(state.timerId);state.timerId=null;}}
+function tick(){var el=document.getElementById("timer");if(el)el.textContent=fmt((Date.now()-state.startTime)/1000);}
+
+function progressNote(){
+  var b=getBest(),n=Object.keys(b).length;
+  document.getElementById("progressNote").textContent=n?(n+" of "+TEXTS.length+" texts completed"):"";
+}
+
+/* ---------- Views ---------- */
+function homeView(){
+  var b=getBest();
+  var items=TEXTS.filter(function(t){return state.filter==="all"||String(t.level)===state.filter;});
+  var chips=[["all","All texts"],["1","Starter"],["2","Steady"],["3","Stretch"]].map(function(c){
+    return '<button class="chip" data-action="filter" data-f="'+c[0]+'" aria-pressed="'+(state.filter===c[0])+'">'+c[1]+'</button>';}).join("");
+  var cards=items.map(function(t){
+    var bt=b[t.id];
+    var best=bt?'<div class="best">Best: '+bt.score+'/5 in '+fmt(bt.secs)+'</div>':'<div class="best none">Not tried yet</div>';
+    return '<button class="card-btn" data-action="open" data-id="'+t.id+'">'+
+      '<div class="pills"><span class="pill">'+LEVELS[t.level].name+'</span><span class="pill plain">'+t.topic+'</span></div>'+
+      '<h3>'+t.title+'</h3>'+
+      '<p class="meta">'+LEVELS[t.level].grades+' · '+t.words+' words · about '+t.mins+' min read · 5 questions</p>'+best+'</button>';}).join("");
+  return '<section class="hero"><div>'+
+    '<h1>Read a little. <em>Think</em> a lot.</h1>'+
+    '<p class="lead">Short texts, five questions each, and a timer that shows how you did. Pick a text and settle in.</p>'+
+    '<div class="cta"><button class="btn" data-action="scroll">Choose a text</button></div></div>'+
+    '<div class="peek" aria-hidden="true"><div class="peek-top"><span>Question 4 of 5</span><span class="timer" style="padding:4px 12px">'+CLOCK+'1:48</span></div>'+
+    '<h3>In the story, the word “swallowed” means…</h3>'+
+    '<div class="o"><span class="k">A</span>ate quickly</div>'+
+    '<div class="o sel"><span class="k">B</span>hid completely</div>'+
+    '<div class="o"><span class="k">C</span>washed away</div></div></section>'+
+    '<section class="steps" aria-label="How it works">'+
+    '<div class="step"><h3>Read</h3><p>Each text takes about a minute. Take your time; the timer starts when you press Start.</p></div>'+
+    '<div class="step"><h3>Answer</h3><p>Five questions: main idea, details, vocabulary, and what the author suggests.</p></div>'+
+    '<div class="step"><h3>Review</h3><p>See your score, your time per question, and why each answer is right.</p></div></section>'+
+    '<section id="library"><div class="lib-head"><h2>Reading library</h2><div class="chips" role="group" aria-label="Filter by level">'+chips+'</div></div>'+
+    '<div class="grid">'+cards+'</div></section>';
+}
+
+function startView(){
+  var t=state.text;
+  return '<section class="start"><button class="link" data-action="home">← All texts</button>'+
+    '<div class="pills" style="margin-top:12px"><span class="pill">'+LEVELS[t.level].name+'</span><span class="pill plain">'+t.topic+'</span></div>'+
+    '<h1>'+t.title+'</h1>'+
+    '<ul><li><strong>Level</strong>'+LEVELS[t.level].grades+'</li><li><strong>Length</strong>'+t.words+' words, about '+t.mins+' min read</li><li><strong>Questions</strong>5, one at a time</li><li><strong>Timer</strong>Starts when you press Start and stops after your last answer</li></ul>'+
+    '<button class="btn" data-action="start">Start reading</button></section>';
+}
+
+function quizView(){
+  var t=state.text,q=state.qs[state.idx],a=state.answers[state.idx];
+  var segs="";
+  for(var i=0;i<5;i++){
+    var c="seg";
+    if(state.answers[i])c+=state.answers[i].ok?" ok":" bad";
+    else if(i===state.idx)c+=" cur";
+    segs+='<div class="'+c+'"></div>';
+  }
+  var opts=q.o.map(function(o,i){
+    var c="opt",st="";
+    if(state.submitted){
+      if(o.ok){c+=" correct";st="Correct";}
+      else if(state.picked===i){c+=" wrong";st="Your answer";}
+    }else if(state.picked===i)c+=" sel";
+    return '<button class="'+c+'" role="radio" aria-checked="'+(state.picked===i)+'" data-action="pick" data-i="'+i+'"'+(state.submitted?" disabled":"")+'>'+
+      '<span class="k">'+LET[i]+'</span><span class="t">'+o.t+'</span><span class="s">'+st+'</span></button>';}).join("");
+  var fb="";
+  if(state.submitted){
+    var right=q.o.filter(function(o){return o.ok;})[0].t;
+    fb='<div class="fb '+(a.ok?"good":"bad")+'" role="status"><strong>'+(a.ok?"Correct.":"Not quite.")+'</strong> '+(a.ok?"":"The answer is “"+right+"” ")+q.why+'</div>';
+  }
+  var last=state.idx===4;
+  var action=state.submitted
+    ?'<button class="btn" data-action="next">'+(last?"See results":"Next question")+'</button>'
+    :'<button class="btn" data-action="submit"'+(state.picked===null?" disabled":"")+'>Submit answer</button>';
+  var paras=t.text.map(function(p){return "<p>"+p+"</p>";}).join("");
+  return '<div class="qbar"><button class="link" data-action="home">← Leave quiz</button>'+
+    '<div class="title">'+t.title+'</div>'+
+    '<div class="timer" aria-label="Elapsed time">'+CLOCK+'<span id="timer">'+fmt(((state.submitted&&last?state.endTime:Date.now())-state.startTime)/1000)+'</span></div></div>'+
+    '<div class="segs" aria-hidden="true">'+segs+'</div>'+
+    '<div class="quiz"><article class="passage"><h2>'+t.title+'</h2>'+paras+'</article>'+
+    '<section class="qcard"><div class="qhead"><span>Question '+(state.idx+1)+' of 5</span><span class="pill">'+q.type+'</span></div>'+
+    '<h2 id="qtitle" tabindex="-1">'+q.q+'</h2>'+
+    '<div class="opts" role="radiogroup" aria-labelledby="qtitle">'+opts+'</div>'+fb+
+    '<div class="actions">'+action+'</div></section></div>';
+}
+
+function resultsView(){
+  var t=state.text,r=state.result,C=2*Math.PI*52,off=C*(1-r.score/5);
+  var msgs=["Keep practicing","Keep practicing","Getting there","Solid effort","Great reading","Perfect score"];
+  var subs=["Read the text once more, then try again.","Re-read the passage before you answer.","You found some of the key ideas.","Most answers were right. Check the review below.","You read closely and answered well.","Every answer was right."];
+  var avg=r.total/5;
+  var rows=state.answers.map(function(a,i){
+    return '<div class="row"><span class="n">'+(i+1)+'</span><span>'+state.qs[i].type+'</span><span class="r '+(a.ok?"ok":"bad")+'">'+(a.ok?"Correct":"Missed")+'</span><span class="tm">'+fmt(a.secs)+'</span></div>';}).join("");
+  var rev=state.answers.map(function(a,i){
+    var q=state.qs[i],right=q.o.filter(function(o){return o.ok;})[0].t,mine=q.o[a.picked].t;
+    return '<details class="rev"'+(a.ok?"":" open")+'><summary><span>'+(i+1)+'. '+q.q+'</span><span class="r '+(a.ok?"ok":"bad")+'" style="color:var('+(a.ok?"--good":"--bad")+')">'+(a.ok?"Correct":"Missed")+'</span></summary>'+
+      '<div class="body"><span><b>Your answer:</b> '+mine+'</span>'+(a.ok?"":'<span><b>Correct answer:</b> '+right+'</span>')+'<span>'+q.why+'</span></div></details>';}).join("");
+  var prev=r.prev?'<p class="sub" style="margin-top:10px">Previous best: '+r.prev.score+'/5 in '+fmt(r.prev.secs)+'</p>':"";
+  var idx=TEXTS.indexOf(t),nxt=TEXTS[(idx+1)%TEXTS.length];
+  return '<section class="res-top"><div class="ring"><svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52" fill="none" stroke="var(--line)" stroke-width="10"/><circle cx="60" cy="60" r="52" fill="none" stroke="var(--blue)" stroke-width="10" stroke-linecap="round" stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+off.toFixed(1)+'"/></svg><div class="num">'+r.score+'/5</div></div>'+
+    '<div><h1 id="rtitle" tabindex="-1">'+msgs[r.score]+'</h1><p class="sub">'+subs[r.score]+' · '+t.title+'</p>'+
+    '<div class="stats"><div class="stat"><b>'+fmt(r.total)+'</b><span>Total time</span></div><div class="stat"><b>'+fmt(avg)+'</b><span>Average per question</span></div><div class="stat"><b>'+Math.round(r.score/5*100)+'%</b><span>Accuracy</span></div></div>'+
+    (r.isBest?'<span class="badge-best">New personal best</span>':prev)+'</div></section>'+
+    '<h2 class="sec-title">Question breakdown</h2><div class="table"><div class="row h"><span>#</span><span>Skill</span><span>Result</span><span class="tm">Time</span></div>'+rows+'</div>'+
+    '<h2 class="sec-title">Review your answers</h2>'+rev+
+    '<div class="res-actions"><button class="btn" data-action="retry">Try again</button><button class="btn ghost" data-action="open" data-id="'+nxt.id+'">Next text: '+nxt.title+'</button><button class="btn ghost" data-action="home">All texts</button></div>';
+}
+
+function render(focusId){
+  progressNote();
+  app.innerHTML=state.view==="home"?homeView():state.view==="start"?startView():state.view==="quiz"?quizView():resultsView();
+  if(focusId){var el=document.getElementById(focusId);if(el)el.focus({preventScroll:false});}
+}
+function go(view,focusId){state.view=view;render(focusId);if(!focusId)window.scrollTo(0,0);}
+
+/* ---------- Actions ---------- */
+function openText(id){stopTimer();state.text=TEXTS.filter(function(t){return t.id===id;})[0];go("start");}
+function startQuiz(){
+  state.qs=state.text.qs.map(function(q){return {type:q.type,q:q.q,why:q.why,o:shuffle(q.o.map(function(t,i){return {t:t,ok:i===0};}))};});
+  state.idx=0;state.picked=null;state.submitted=false;state.answers=[];state.result=null;
+  state.startTime=Date.now();state.qStart=state.startTime;
+  stopTimer();state.timerId=setInterval(tick,250);
+  go("quiz","qtitle");window.scrollTo(0,0);
+}
+function pick(i){
+  if(state.submitted)return;
+  state.picked=i;render();
+  var el=app.querySelector('[data-i="'+i+'"]');if(el)el.focus();
+}
+function submit(){
+  if(state.picked===null||state.submitted)return;
+  var now=Date.now(),q=state.qs[state.idx];
+  state.answers[state.idx]={picked:state.picked,ok:!!q.o[state.picked].ok,secs:(now-state.qStart)/1000};
+  state.submitted=true;
+  if(state.idx===4){state.endTime=now;stopTimer();}
+  render();
+  var fb=app.querySelector(".fb");if(fb)fb.scrollIntoView({block:"nearest"});
+}
+function next(){
+  if(!state.submitted)return;
+  if(state.idx<4){
+    state.idx++;state.picked=null;state.submitted=false;state.qStart=Date.now();
+    render("qtitle");
+  }else finish();
+}
+function finish(){
+  var score=state.answers.filter(function(a){return a.ok;}).length;
+  var total=(state.endTime-state.startTime)/1000;
+  var prev=getBest()[state.text.id]||null;
+  var isBest=!prev||score>prev.score||(score===prev.score&&total<prev.secs);
+  if(isBest)saveBest(state.text.id,{score:score,secs:Math.round(total)});
+  state.result={score:score,total:total,prev:prev,isBest:isBest&&!!prev?true:(isBest&&!prev)};
+  if(!prev)state.result.isBest=false;
+  go("results","rtitle");window.scrollTo(0,0);
+}
+
+app.addEventListener("click",function(e){
+  var b=e.target.closest("[data-action]");if(!b)return;
+  var a=b.getAttribute("data-action");
+  if(a==="home"){stopTimer();state.filter=state.filter;go("home");}
+  else if(a==="filter"){state.filter=b.getAttribute("data-f");render();var c=app.querySelector('[data-f="'+state.filter+'"]');if(c)c.focus();}
+  else if(a==="open")openText(b.getAttribute("data-id"));
+  else if(a==="start")startQuiz();
+  else if(a==="pick")pick(+b.getAttribute("data-i"));
+  else if(a==="submit")submit();
+  else if(a==="next")next();
+  else if(a==="retry")startQuiz();
+  else if(a==="scroll"){var l=document.getElementById("library");if(l)l.scrollIntoView({behavior:"smooth"});}
+});
+document.querySelector(".brand").addEventListener("click",function(){stopTimer();go("home");});
+document.addEventListener("keydown",function(e){
+  if(state.view!=="quiz"||state.submitted||e.metaKey||e.ctrlKey||e.altKey)return;
+  var n=parseInt(e.key,10);
+  if(n>=1&&n<=4)pick(n-1);
+});
+
+render();
+</script>
+
+</body></html>
